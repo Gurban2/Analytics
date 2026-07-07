@@ -2,19 +2,26 @@ import { useState, useMemo, useCallback } from 'react'
 import emlakData from '../data/emlak.json'
 import EmlakTable from '../components/EmlakTable'
 
-const SEHER_OPTIONS = (() => {
+function getSeherOptions(data) {
   const counts = {}
-  emlakData.forEach(d => { if (d.seher) counts[d.seher] = (counts[d.seher] || 0) + 1 })
+  data.forEach(d => { if (d.seher) counts[d.seher] = (counts[d.seher] || 0) + 1 })
   return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([k]) => k)
-})()
+}
 
 export default function Dashboard() {
+  const [activeSource, setActiveSource] = useState('tap.az')
   const [emlakSearch, setEmlakSearch] = useState('')
   const [emlakRooms, setEmlakRooms] = useState('')
   const [emlakSeher, setEmlakSeher] = useState('')
   const [emlakMode, setEmlakMode] = useState('all')
   const [updating, setUpdating] = useState(false)
   const [updateMsg, setUpdateMsg] = useState('')
+
+  const sourceData = useMemo(
+    () => emlakData.filter(d => (d.source || 'tap.az') === activeSource),
+    [activeSource]
+  )
+  const seherOptions = useMemo(() => getSeherOptions(sourceData), [sourceData])
 
   const triggerUpdate = useCallback(async () => {
     setUpdating(true)
@@ -42,7 +49,7 @@ export default function Dashboard() {
   }, [])
 
   const filteredEmlak = useMemo(() => {
-    return emlakData.filter(p => {
+    return sourceData.filter(p => {
       if (emlakRooms && p.rooms !== emlakRooms) return false
       if (emlakSeher && p.seher !== emlakSeher) return false
       if (emlakSearch) {
@@ -58,9 +65,19 @@ export default function Dashboard() {
 
       {/* Header */}
       <header className="border-b border-[#1e1e1e] px-4 py-1.5 flex items-center gap-3 flex-wrap">
-        <span className="text-white font-semibold" style={{ fontSize: 13 }}>tap.az</span>
-        <span className="text-[#555]">|</span>
-        <span className="text-[#999]">Mənzillər · Bakı · {emlakData.length.toLocaleString()} elan</span>
+        <span className="text-white font-semibold" style={{ fontSize: 13 }}>Emlak Analytics</span>
+        <span className="text-[#333]">|</span>
+        {['tap.az', 'bina.az'].map(src => {
+          const count = emlakData.filter(d => (d.source || 'tap.az') === src).length
+          return (
+            <button key={src} onClick={() => { setActiveSource(src); setEmlakMode('all'); setEmlakSeher(''); setEmlakSearch(''); setEmlakRooms('') }}
+              className={`px-2 py-0.5 rounded transition-colors ${activeSource === src ? 'bg-[#1e1e1e] text-white' : 'text-[#555] hover:text-[#999]'}`}
+              style={{ fontSize: 12 }}>
+              {src} <span className="text-[#444]">({count})</span>
+            </button>
+          )
+        })}
+        <span className="text-[#999] ml-1">· Bakı · Mənzillər</span>
         <span className="text-[#777] ml-auto">{filteredEmlak.length.toLocaleString()} nəticə</span>
       </header>
 
@@ -78,7 +95,7 @@ export default function Dashboard() {
           style={{ fontSize: 11 }}
         >
           <option value="">Rayon</option>
-          {SEHER_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+          {seherOptions.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <div className="flex gap-1 flex-wrap">
           {['', '1', '2', '3', '4'].map(r => (
