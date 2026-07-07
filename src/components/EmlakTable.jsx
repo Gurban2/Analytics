@@ -145,7 +145,7 @@ export default function EmlakTable({ data, mode = 'all' }) {
                         className="text-[#aaa] hover:text-[#e0e0e0] truncate block" style={{ maxWidth: c.w }}
                         title={row.description || row.title}>
                         {row.description
-                          ? row.description.trim().split(/\s+/).slice(0, 2).join(' ')
+                          ? row.description.trim().split(/\s+/).slice(0, 4).join(' ')
                           : (row.title || '—')}
                       </a>
                     ) : c.key === 'views' ? (
