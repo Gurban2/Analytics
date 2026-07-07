@@ -58,10 +58,10 @@ export default function Dashboard() {
 
       {/* Header */}
       <header className="border-b border-[#1e1e1e] px-4 py-1.5 flex items-center gap-3 flex-wrap">
-        <span className="text-white font-medium" style={{ fontSize: 13 }}>tap.az</span>
-        <span className="text-[#333]">|</span>
-        <span className="text-[#444]">Mənzillər · Bakı · {emlakData.length.toLocaleString()} elan</span>
-        <span className="text-[#333] ml-auto">{filteredEmlak.length.toLocaleString()} nəticə</span>
+        <span className="text-white font-semibold" style={{ fontSize: 13 }}>tap.az</span>
+        <span className="text-[#555]">|</span>
+        <span className="text-[#999]">Mənzillər · Bakı · {emlakData.length.toLocaleString()} elan</span>
+        <span className="text-[#777] ml-auto">{filteredEmlak.length.toLocaleString()} nəticə</span>
       </header>
 
       {/* Filters */}
