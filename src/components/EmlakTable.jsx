@@ -113,12 +113,12 @@ export default function EmlakTable({ data, mode = 'all' }) {
   return (
     <div>
       {/* District avg info bar */}
-      <div className="flex gap-4 mb-1.5 text-[#444] flex-wrap" style={{ fontSize: 10 }}>
-        <span>Orta ₼/m²: <span className="text-[#666]">{Math.round(globalAvg).toLocaleString()} ₼</span></span>
-        <span className="text-[#333]">·</span>
-        <span className="text-[#2a5c2a]">■ &lt;−15% ucuz</span>
-        <span className="text-[#5c2a2a]">■ &gt;+15% baha</span>
-        <span className="text-[#333]">· rayon ortalamasına görə</span>
+      <div className="flex gap-4 mb-1.5 text-[#666] flex-wrap" style={{ fontSize: 10 }}>
+        <span>Orta ₼/m²: <span className="text-[#999]">{Math.round(globalAvg).toLocaleString()} ₼</span></span>
+        <span className="text-[#444]">·</span>
+        <span className="text-[#4caf50]">■ &lt;−15% ucuz</span>
+        <span className="text-[#e57373]">■ &gt;+15% baha</span>
+        <span className="text-[#444]">· rayon ortalamasına görə</span>
       </div>
 
       <div className="overflow-x-auto border border-[#1a1a1a] rounded" style={{ fontSize: 11 }}>
