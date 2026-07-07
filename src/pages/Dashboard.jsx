@@ -58,7 +58,7 @@ export default function Dashboard() {
       }
       return true
     })
-  }, [emlakSearch, emlakRooms, emlakSeher])
+  }, [sourceData, emlakSearch, emlakRooms, emlakSeher])
 
   return (
     <div className="min-h-screen w-full bg-[#0d0d0d] text-[#c9c9c9]" style={{ fontSize: 11 }}>
