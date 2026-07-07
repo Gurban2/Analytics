@@ -149,7 +149,9 @@ export default function EmlakTable({ data, mode = 'all' }) {
                           : (row.title || '—')}
                       </a>
                     ) : c.key === 'views' ? (
-                      <span className="text-[#6ba3d6] font-medium">{(row.views || 0).toLocaleString()}</span>
+                      row.source === 'bina.az'
+                        ? <span className="text-[#555]">—</span>
+                        : <span className="text-[#6ba3d6] font-medium">{(row.views || 0).toLocaleString()}</span>
                     ) : c.key === 'dev' ? (
                       <span className={devColor(row.dev)}>{devLabel(row.dev)}</span>
                     ) : c.key === 'floor_info' ? (() => {
