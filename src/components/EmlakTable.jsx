@@ -87,7 +87,7 @@ export default function EmlakTable({ data, mode = 'all' }) {
     { key: 'first_seen',    label: 'Tarix',   w: 90 },
   ]
 
-  const thCls = "px-2 py-1 text-left text-[#444] font-normal cursor-pointer hover:text-[#888] whitespace-nowrap select-none"
+  const thCls = "px-2 py-1 text-left text-[#777] font-normal cursor-pointer hover:text-[#bbb] whitespace-nowrap select-none"
   const tdCls = "px-2 py-0.5 whitespace-nowrap overflow-hidden"
 
   function rowBg(dev) {
@@ -125,7 +125,7 @@ export default function EmlakTable({ data, mode = 'all' }) {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[#1a1a1a] bg-[#0f0f0f]">
-              <th className="px-2 py-1 text-left text-[#333] font-normal w-8">#</th>
+              <th className="px-2 py-1 text-left text-[#555] font-normal w-8">#</th>
               {cols.map(c => (
                 <th key={c.key} className={thCls} style={{ width: c.w, maxWidth: c.w }}
                   onClick={() => toggleSort(c.key)}>
