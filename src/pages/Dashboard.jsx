@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [updateMsg, setUpdateMsg] = useState('')
 
   const sourceData = useMemo(
-    () => emlakData.filter(d => (d.source || 'tap.az') === activeSource),
+    () => activeSource === 'all' ? emlakData : emlakData.filter(d => (d.source || 'tap.az') === activeSource),
     [activeSource]
   )
   const seherOptions = useMemo(() => getSeherOptions(sourceData), [sourceData])
@@ -67,16 +67,13 @@ export default function Dashboard() {
       <header className="border-b border-[#1e1e1e] px-4 py-1.5 flex items-center gap-3 flex-wrap">
         <span className="text-white font-semibold" style={{ fontSize: 13 }}>Emlak Analytics</span>
         <span className="text-[#333]">|</span>
-        {['tap.az', 'bina.az'].map(src => {
-          const count = emlakData.filter(d => (d.source || 'tap.az') === src).length
-          return (
-            <button key={src} onClick={() => { setActiveSource(src); setEmlakMode('all'); setEmlakSeher(''); setEmlakSearch(''); setEmlakRooms('') }}
-              className={`px-2 py-0.5 rounded transition-colors ${activeSource === src ? 'bg-[#1e1e1e] text-white' : 'text-[#555] hover:text-[#999]'}`}
-              style={{ fontSize: 12 }}>
-              {src} <span className="text-[#444]">({count})</span>
-            </button>
-          )
-        })}
+        {[['all', 'Hamısı', emlakData.length], ['tap.az', 'tap.az', emlakData.filter(d => (d.source||'tap.az')==='tap.az').length], ['bina.az', 'bina.az', emlakData.filter(d => d.source==='bina.az').length]].map(([src, label, count]) => (
+          <button key={src} onClick={() => { setActiveSource(src); setEmlakMode('all'); setEmlakSeher(''); setEmlakSearch(''); setEmlakRooms('') }}
+            className={`px-2 py-0.5 rounded transition-colors ${activeSource === src ? 'bg-[#1e1e1e] text-white' : 'text-[#555] hover:text-[#999]'}`}
+            style={{ fontSize: 12 }}>
+            {label} <span className="text-[#444]">({count})</span>
+          </button>
+        ))}
         <span className="text-[#999] ml-1">· Bakı · Mənzillər</span>
         <span className="text-[#777] ml-auto">{filteredEmlak.length.toLocaleString()} nəticə</span>
       </header>
