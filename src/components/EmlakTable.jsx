@@ -142,8 +142,11 @@ export default function EmlakTable({ data, mode = 'all' }) {
                   <td key={c.key} className={tdCls} style={{ maxWidth: c.w }}>
                     {c.key === 'title' ? (
                       <a href={row.url} target="_blank" rel="noreferrer"
-                        className="text-[#aaa] hover:text-[#e0e0e0] truncate block" style={{ maxWidth: c.w }}>
-                        {row.title || '—'}
+                        className="text-[#aaa] hover:text-[#e0e0e0] truncate block" style={{ maxWidth: c.w }}
+                        title={row.description || row.title}>
+                        {row.description
+                          ? row.description.trim().split(/\s+/).slice(0, 2).join(' ')
+                          : (row.title || '—')}
                       </a>
                     ) : c.key === 'views' ? (
                       <span className="text-[#6ba3d6] font-medium">{(row.views || 0).toLocaleString()}</span>
