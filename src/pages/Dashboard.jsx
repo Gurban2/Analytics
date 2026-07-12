@@ -8,8 +8,14 @@ function getSeherOptions(data) {
   return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([k]) => k)
 }
 
+const PRICE_RANGES = [
+  { key: '100-200', label: '100k–200k', min: 100000, max: 200000 },
+  { key: '50-80',   label: '50k–80k',  min: 50000,  max: 80000  },
+]
+
 export default function Dashboard() {
-  const [activeSource, setActiveSource] = useState('tap.az')
+  const [priceRange, setPriceRange] = useState('100-200')
+  const [activeSource, setActiveSource] = useState('all')
   const [emlakSearch, setEmlakSearch] = useState('')
   const [emlakRooms, setEmlakRooms] = useState('')
   const [emlakSeher, setEmlakSeher] = useState('')
@@ -17,9 +23,14 @@ export default function Dashboard() {
   const [updating, setUpdating] = useState(false)
   const [updateMsg, setUpdateMsg] = useState('')
 
+  const priceData = useMemo(() => {
+    const r = PRICE_RANGES.find(r => r.key === priceRange)
+    return emlakData.filter(d => d.price_num >= r.min && d.price_num <= r.max)
+  }, [priceRange])
+
   const sourceData = useMemo(
-    () => activeSource === 'all' ? emlakData : emlakData.filter(d => (d.source || 'tap.az') === activeSource),
-    [activeSource]
+    () => activeSource === 'all' ? priceData : priceData.filter(d => (d.source || 'tap.az') === activeSource),
+    [activeSource, priceData]
   )
   const seherOptions = useMemo(() => getSeherOptions(sourceData), [sourceData])
 
@@ -67,7 +78,17 @@ export default function Dashboard() {
       <header className="border-b border-[#1e1e1e] px-4 py-1.5 flex items-center gap-3 flex-wrap">
         <span className="text-white font-semibold" style={{ fontSize: 13 }}>Emlak Analytics</span>
         <span className="text-[#333]">|</span>
-        {[['all', 'Hamısı', emlakData.length], ['tap.az', 'tap.az', emlakData.filter(d => (d.source||'tap.az')==='tap.az').length], ['bina.az', 'bina.az', emlakData.filter(d => d.source==='bina.az').length]].map(([src, label, count]) => (
+        {/* Price range selector */}
+        {PRICE_RANGES.map(r => (
+          <button key={r.key} onClick={() => { setPriceRange(r.key); setActiveSource('all'); setEmlakMode('all'); setEmlakSeher(''); setEmlakSearch(''); setEmlakRooms('') }}
+            className={`px-2 py-0.5 rounded transition-colors ${priceRange === r.key ? 'bg-[#1a2a1a] text-[#7cbf7c]' : 'text-[#555] hover:text-[#999]'}`}
+            style={{ fontSize: 12 }}>
+            {r.label}
+          </button>
+        ))}
+        <span className="text-[#333]">|</span>
+        {/* Source tabs */}
+        {[['all', 'Hamısı', priceData.length], ['tap.az', 'tap.az', priceData.filter(d => (d.source||'tap.az')==='tap.az').length], ['bina.az', 'bina.az', priceData.filter(d => d.source==='bina.az').length]].map(([src, label, count]) => (
           <button key={src} onClick={() => { setActiveSource(src); setEmlakMode('all'); setEmlakSeher(''); setEmlakSearch(''); setEmlakRooms('') }}
             className={`px-2 py-0.5 rounded transition-colors ${activeSource === src ? 'bg-[#1e1e1e] text-white' : 'text-[#555] hover:text-[#999]'}`}
             style={{ fontSize: 12 }}>
